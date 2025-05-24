@@ -80,6 +80,18 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./public/index.html",
+      minify: isProduction ? {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeRedundantAttributes: true,
+        useShortDoctype: true,
+        removeEmptyAttributes: true,
+        removeStyleLinkTypeAttributes: true,
+        keepClosingSlash: true,
+        minifyJS: true,
+        minifyCSS: true,
+        minifyURLs: true,
+      } : false,
     }),
     isProduction &&
       new MiniCssExtractPlugin({
@@ -105,6 +117,10 @@ module.exports = {
           format: {
             comments: false,
           },
+          compress: {
+            drop_console: isProduction,
+            drop_debugger: isProduction,
+          },
         },
         extractComments: false,
       }),
@@ -112,14 +128,32 @@ module.exports = {
     ],
     splitChunks: {
       chunks: "all",
+      maxInitialRequests: Infinity,
+      minSize: 20000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: "vendors",
-          chunks: "all",
+          name(module) {
+            // get the name. E.g. node_modules/packageName/not/this/part.js
+            // or node_modules/packageName
+            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+            // npm package names are URL-safe, but some servers don't like @ symbols
+            return `vendor.${packageName.replace('@', '')}`;
+          },
+        },
+        common: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true,
         },
       },
     },
+    runtimeChunk: 'single',
+  },
+  performance: {
+    hints: isProduction ? 'warning' : false,
+    maxEntrypointSize: 512000,
+    maxAssetSize: 512000,
   },
   ignoreWarnings: [
     {

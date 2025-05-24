@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "webpack serve --mode development",
-    "build": "PUBLIC_URL=/iot-device-monitor webpack --mode production",
+    "build": "webpack --mode production",
     "build:local": "webpack --mode production",
     "test": "NODE_OPTIONS='--no-deprecation' jest --verbose",
     "test:watch": "NODE_OPTIONS='--no-deprecation' jest --watch",
