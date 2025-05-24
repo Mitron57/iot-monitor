@@ -80,8 +80,10 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env.PUBLIC_URL': JSON.stringify(publicPath),
-      'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+      'process.env': {
+        PUBLIC_URL: JSON.stringify(publicPath),
+        NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
+      },
     }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
