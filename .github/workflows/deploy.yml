@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          PUBLIC_URL: /iot-monitoring
+          PUBLIC_URL: /iot-monitor
           NODE_ENV: production
       
       - name: Setup Pages
