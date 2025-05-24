@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
+const webpack = require("webpack")
 
 const isProduction = process.env.NODE_ENV === "production"
 const publicPath = process.env.PUBLIC_URL || "/"
@@ -78,6 +79,10 @@ module.exports = {
     },
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env.PUBLIC_URL': JSON.stringify(publicPath),
+      'process.env.NODE_ENV': JSON.stringify(isProduction ? 'production' : 'development'),
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       minify: isProduction ? {
@@ -134,10 +139,7 @@ module.exports = {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
           name(module) {
-            // get the name. E.g. node_modules/packageName/not/this/part.js
-            // or node_modules/packageName
             const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-            // npm package names are URL-safe, but some servers don't like @ symbols
             return `vendor.${packageName.replace('@', '')}`;
           },
         },
