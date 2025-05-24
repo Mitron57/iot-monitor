@@ -4,10 +4,17 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
-const webpack = require("webpack")
 
 const isProduction = process.env.NODE_ENV === "production"
-const publicPath = process.env.PUBLIC_URL || "/"
+const isGitHubPages = process.env.PUBLIC_URL && process.env.PUBLIC_URL !== "/"
+const publicPath = isGitHubPages ? process.env.PUBLIC_URL + "/" : "/"
+
+console.log("Build configuration:", {
+  isProduction,
+  isGitHubPages,
+  publicPath,
+  PUBLIC_URL: process.env.PUBLIC_URL,
+})
 
 module.exports = {
   mode: isProduction ? "production" : "development",
@@ -15,6 +22,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "[name].[contenthash].js",
+    chunkFilename: "[name].[contenthash].js",
+    assetModuleFilename: "assets/[hash][ext][query]",
     publicPath: publicPath,
     clean: true,
   },
@@ -79,30 +88,14 @@ module.exports = {
     },
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        PUBLIC_URL: JSON.stringify(publicPath),
-        NODE_ENV: JSON.stringify(isProduction ? 'production' : 'development'),
-      },
-    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
-      minify: isProduction ? {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      } : false,
+      publicPath: publicPath,
     }),
     isProduction &&
       new MiniCssExtractPlugin({
         filename: "styles/[name].[contenthash].css",
+        chunkFilename: "styles/[name].[contenthash].css",
       }),
     new CopyPlugin({
       patterns: [
@@ -124,10 +117,6 @@ module.exports = {
           format: {
             comments: false,
           },
-          compress: {
-            drop_console: isProduction,
-            drop_debugger: isProduction,
-          },
         },
         extractComments: false,
       }),
@@ -135,29 +124,14 @@ module.exports = {
     ],
     splitChunks: {
       chunks: "all",
-      maxInitialRequests: Infinity,
-      minSize: 20000,
       cacheGroups: {
         vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name(module) {
-            const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
-            return `vendor.${packageName.replace('@', '')}`;
-          },
-        },
-        common: {
-          minChunks: 2,
-          priority: -20,
-          reuseExistingChunk: true,
+          name: "vendors",
+          chunks: "all",
         },
       },
     },
-    runtimeChunk: 'single',
-  },
-  performance: {
-    hints: isProduction ? 'warning' : false,
-    maxEntrypointSize: 512000,
-    maxAssetSize: 512000,
   },
   ignoreWarnings: [
     {
