@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require("terser-webpack-plugin")
 const CopyPlugin = require("copy-webpack-plugin")
+const webpack = require("webpack")
 
 const isProduction = process.env.NODE_ENV === "production"
 const isGitHubPages = process.env.PUBLIC_URL && process.env.PUBLIC_URL !== "/"
@@ -88,6 +89,12 @@ module.exports = {
     },
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify({
+        PUBLIC_URL: publicPath,
+        NODE_ENV: isProduction ? 'production' : 'development'
+      })
+    }),
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       publicPath: publicPath,
