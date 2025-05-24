@@ -60,21 +60,6 @@ npm run mock-api
 - Owner: `owner@example.com` / `password123`
 - Guest: `guest@example.com` / `guest123`
 
-## Project Structure
-
-\`\`\`
-src/
-├── api/          # API client and services
-├── animations/   # Animation utilities
-├── assets/       # Static assets
-├── components/   # Reusable components
-├── hooks/        # Custom React hooks
-├── pages/        # Application pages
-├── stores/       # Zustand state stores
-├── types/        # TypeScript type definitions
-└── utils/        # Utility functions
-\`\`\`
-
 ## Building for Production
 
 \`\`\`bash
