@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect } from "react"
 import { animate } from "animejs"
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card"

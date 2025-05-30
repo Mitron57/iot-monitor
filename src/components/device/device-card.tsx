@@ -1,5 +1,3 @@
-"use client"
-
 import { useState } from "react"
 import { Thermometer, Droplets, Wifi, WifiOff, Battery, BatteryLow, BatteryWarning } from "lucide-react"
 import type { Device } from "../../types/device"

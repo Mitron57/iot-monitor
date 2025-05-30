@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useRef } from "react"
 import { animate } from "animejs"
 import { AlertTriangle, X } from "lucide-react"
