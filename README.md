@@ -33,25 +33,25 @@ A Single Page Application for monitoring IoT devices built with React, TypeScrip
 ### Installation
 
 1. Clone the repository
-\`\`\`bash
+```bash
 git clone https://github.com/yourusername/iot-monitoring.git
 cd iot-monitoring
-\`\`\`
+```
 
 2. Install dependencies
-\`\`\`bash
+```bash
 npm install
-\`\`\`
+```
 
 3. Start the development server
-\`\`\`bash
+```bash
 npm start
-\`\`\`
+```
 
 4. Start the mock API server
-\`\`\`bash
+```bash
 npm run mock-api
-\`\`\`
+```
 
 5. Open [http://localhost:3000](http://localhost:3000) in your browser
 
@@ -62,8 +62,8 @@ npm run mock-api
 
 ## Building for Production
 
-\`\`\`bash
+```bash
 npm run build
-\`\`\`
+```
 
 This will create a `dist` folder with the production build of your application.
